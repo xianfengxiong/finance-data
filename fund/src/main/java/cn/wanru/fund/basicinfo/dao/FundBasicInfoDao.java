@@ -1,6 +1,6 @@
-package cn.wanru.fund.dao;
+package cn.wanru.fund.basicinfo.dao;
 
-import cn.wanru.fund.entity.FundBasicInfo;
+import cn.wanru.fund.basicinfo.enitty.FundBasicInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface FundBasicInfoDao extends JpaRepository<FundBasicInfo,Long> {
 
-    FundBasicInfoDao findByCode(String code);
+    FundBasicInfo findByCode(String code);
 
 }

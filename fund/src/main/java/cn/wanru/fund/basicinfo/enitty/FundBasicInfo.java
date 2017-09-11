@@ -1,4 +1,4 @@
-package cn.wanru.fund.entity;
+package cn.wanru.fund.basicinfo.enitty;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;

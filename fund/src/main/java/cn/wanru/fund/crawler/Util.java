@@ -3,7 +3,6 @@ package cn.wanru.fund.crawler;
 import cn.wanru.webmagic.PageUtil;
 import us.codecraft.webmagic.Request;
 
-import static cn.wanru.fund.crawler.Constant.page_info_key;
 import static cn.wanru.fund.crawler.Constant.support_key;
 
 /**
@@ -24,11 +23,4 @@ public class Util {
         return PageUtil.getField(support_key,request);
     }
 
-    public static void setPageInfo(Request request,PageInfo pageInfo) {
-        PageUtil.setField(page_info_key,pageInfo,request);
-    }
-
-    public static PageInfo getPageInfo(Request request) {
-        return PageUtil.getField(page_info_key,request);
-    }
 }

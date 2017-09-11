@@ -1,6 +1,6 @@
 package cn.wanru.fund;
 
-import cn.wanru.fund.crawler.nav.NtesPageable;
+import cn.wanru.fund.crawler.PageSizePageable;
 import cn.wanru.webmagic.Pageable;
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ public class PageableTest {
 
     @Test
     public void testClone() {
-        NtesPageable pageable = new NtesPageable();
+        PageSizePageable pageable = new PageSizePageable(60);
         pageable.setCurrentPage(0);
         pageable.setCurrentPageSize(60);
         Pageable next = pageable.next();

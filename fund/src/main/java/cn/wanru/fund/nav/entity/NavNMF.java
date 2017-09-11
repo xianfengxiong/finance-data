@@ -1,4 +1,4 @@
-package cn.wanru.fund.entity.nav;
+package cn.wanru.fund.nav.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

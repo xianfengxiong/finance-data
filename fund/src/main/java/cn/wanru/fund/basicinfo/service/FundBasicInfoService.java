@@ -1,8 +1,11 @@
-package cn.wanru.fund.service;
+package cn.wanru.fund.basicinfo.service;
 
-import cn.wanru.fund.dao.FundBasicInfoDao;
+import cn.wanru.fund.basicinfo.dao.FundBasicInfoDao;
+import cn.wanru.fund.basicinfo.enitty.FundBasicInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author xxf
@@ -14,7 +17,11 @@ public class FundBasicInfoService {
     @Autowired
     private FundBasicInfoDao fundBasicInfoDao;
 
-    public FundBasicInfoDao findByCode(String code) {
+    public List<FundBasicInfo> findAll() {
+        return fundBasicInfoDao.findAll();
+    }
+
+    public FundBasicInfo findByCode(String code) {
         return fundBasicInfoDao.findByCode(code);
     }
 

@@ -1,0 +1,39 @@
+<configuration>
+
+    <property name="logdir" value="/home/xxf/log/fund"/>
+
+    <appender name="StdOut" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.sss} [%thread] %level %logger - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="webmagic" class="ch.qos.logback.core.FileAppender">
+        <file>${logdir}/webmagic.log</file>
+        <encoder>
+            <pattern>%level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger:%line - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="debugFile" class="ch.qos.logback.core.FileAppender">
+        <file>${logdir}/debug.log</file>
+        <encoder>
+            <pattern>%level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger:%line - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <logger name="cn.wanru.fund" additivity="false" level="debug">
+        <appender-ref ref="debugFile" />
+    </logger>
+
+    <logger name="us.codecraft.webmagic" additivity="false" level="warn">
+        <appender-ref ref="webmagic"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="StdOut"/>
+    </root>
+</configuration>

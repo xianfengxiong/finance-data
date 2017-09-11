@@ -1,8 +1,7 @@
-package cn.wanru.fund.service.nav;
+package cn.wanru.fund.nav.service;
 
-import cn.wanru.fund.dao.nav.NavNMFDao;
-import cn.wanru.fund.entity.nav.NavMMF;
-import cn.wanru.fund.entity.nav.NavNMF;
+import cn.wanru.fund.nav.dao.NavNMFDao;
+import cn.wanru.fund.nav.entity.NavNMF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
