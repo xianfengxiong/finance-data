@@ -1,8 +1,8 @@
-package cn.wanru.fund.crawler.nav;
+package cn.wanru.fund.nav.crawl.ntes;
 
 import cn.wanru.fund.crawler.ClassBasePipeline;
-import cn.wanru.fund.entity.nav.BaseNav;
-import cn.wanru.fund.service.nav.NavService;
+import cn.wanru.fund.nav.entity.BaseNav;
+import cn.wanru.fund.nav.service.NavService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -12,13 +12,13 @@ import java.util.List;
  * @date 17-9-9
  */
 @Component
-public class NtesPipeline extends ClassBasePipeline<List<BaseNav>> {
+public class NTESPipeline extends ClassBasePipeline<List<BaseNav>> {
 
     @Autowired
     private NavService navService;
 
-    public NtesPipeline() {
-        super(NtesPageProcessor.class);
+    public NTESPipeline() {
+        super(NTESPageProcessor.class);
     }
 
     @Override

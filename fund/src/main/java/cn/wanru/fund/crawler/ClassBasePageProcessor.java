@@ -32,7 +32,7 @@ public abstract class ClassBasePageProcessor<T> extends SupportablePageProcessor
 
     @Override
     public void process(Page page) {
-        T data = doProcess(page);
+        T data = processPage(page);
         setData(data,page);
 
         if (log.isDebugEnabled()) {
@@ -44,6 +44,6 @@ public abstract class ClassBasePageProcessor<T> extends SupportablePageProcessor
         }
     }
 
-    protected abstract T doProcess(Page page);
+    protected abstract T processPage(Page page);
 
 }

@@ -1,10 +1,12 @@
 package cn.wanru.fund.crawler;
 
+import cn.wanru.webmagic.Pageable;
+
 /**
  * @author xxf
  * @date 17-9-10
  */
-public class GenericPageable implements Cloneable {
+public abstract class GenericPageable implements Pageable, Cloneable {
 
     private String code;
 
@@ -17,6 +19,8 @@ public class GenericPageable implements Cloneable {
     private int currentPageSize;
 
     private int totalPage;
+
+    private boolean mmf;
 
     // region Getter/Setter
 
@@ -68,9 +72,29 @@ public class GenericPageable implements Cloneable {
         this.totalPage = totalPage;
     }
 
+    public boolean isMmf() {
+        return mmf;
+    }
 
-    // endregion
+    public void setMmf(boolean mmf) {
+        this.mmf = mmf;
+    }
 
+// endregion
+
+
+    @Override
+    public Pageable next() {
+        try {
+            GenericPageable clone = (GenericPageable) clone();
+            clone.setTotalPage(0);
+            clone.setCurrentPageSize(0);
+            clone.setCurrentPage(getCurrentPage() + 1);
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public String toString() {
@@ -81,6 +105,7 @@ public class GenericPageable implements Cloneable {
                 ", currentPage=" + currentPage +
                 ", currentPageSize=" + currentPageSize +
                 ", totalPage=" + totalPage +
+                ", mmf=" + mmf +
                 '}';
     }
 }

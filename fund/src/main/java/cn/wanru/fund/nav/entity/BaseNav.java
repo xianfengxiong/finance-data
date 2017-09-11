@@ -1,17 +1,15 @@
-package cn.wanru.fund.entity.nav;
+package cn.wanru.fund.nav.entity;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author xxf
  * @date 17-9-9
  */
+@MappedSuperclass
 public abstract class BaseNav {
 
     @Id @GeneratedValue

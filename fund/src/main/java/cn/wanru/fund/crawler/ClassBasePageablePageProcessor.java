@@ -5,7 +5,6 @@ import cn.wanru.webmagic.pageprocessor.PageablePageProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
 
 import java.util.Collection;
 
@@ -34,18 +33,20 @@ public abstract class ClassBasePageablePageProcessor<T>
     }
 
     @Override
-    protected void doProcess(Page page) {
-        T data = processInternal(page);
-        setData(data,page);
-
+    protected void processPageAndUpdatePageable(Page page,Pageable pageable) {
+        T data = processPage(page,pageable);
+        setData(data, page);
+        updatePageable(data,pageable);
         if (log.isDebugEnabled()) {
             int size = data instanceof Collection
-                    ? ((Collection)data).size() : 1;
+                    ? ((Collection) data).size() : 1;
 
-            log.debug("url[] crawl success,size=[]",
-                    page.getRequest().getUrl(),size);
+            log.debug("url[{}] crawl success,size=[{}]",
+                    page.getRequest().getUrl(), size);
         }
     }
 
-    protected abstract T processInternal(Page page) ;
+    protected abstract T processPage(Page page,Pageable pageable);
+
+    protected abstract void updatePageable(T data,Pageable pageable);
 }

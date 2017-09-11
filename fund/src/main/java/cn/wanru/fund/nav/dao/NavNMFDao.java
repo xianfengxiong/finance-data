@@ -1,7 +1,7 @@
-package cn.wanru.fund.dao.nav;
+package cn.wanru.fund.nav.dao;
 
-import cn.wanru.fund.entity.nav.NavNMF;
-import cn.wanru.fund.entity.nav.NavSource;
+import cn.wanru.fund.nav.entity.NavNMF;
+import cn.wanru.fund.nav.entity.NavSource;
 import org.joda.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 
