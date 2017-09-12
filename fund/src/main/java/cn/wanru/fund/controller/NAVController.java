@@ -7,13 +7,15 @@ import cn.wanru.fund.crawler.PageSizePageable;
 import cn.wanru.fund.nav.crawl.eastmoney.EMUtil;
 import cn.wanru.fund.nav.crawl.ntes.NTESUtil;
 import cn.wanru.fund.nav.crawl.sina.SINAUtil;
+import cn.wanru.fund.util.Code;
+import cn.wanru.fund.util.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import us.codecraft.webmagic.Spider;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,80 +33,71 @@ public class NAVController {
     private FundBasicInfoService basicInfoService;
 
 
-    @RequestMapping("/{source}/{start}/{end}/{code}")
-    public String addRequest(@PathVariable(name="source") String source,
-                             @PathVariable(name="start") String start,
-                             @PathVariable(name="end") String end,
-                             @PathVariable(name="code") String code) {
+    @RequestMapping("/{code}/{source}/{start}-{end}")
+    public JsonResponse addRequest(
+            @PathVariable(name="code",required = false) String code,
+            @PathVariable(name="source") String source,
+            @PathVariable(name="start") String start,
+            @PathVariable(name="end") String end) {
 
         List<FundBasicInfo> toUse = null;
         if (code != null) {
             FundBasicInfo basicInfo = basicInfoService.findByCode(code);
-            toUse = Arrays.asList(basicInfo);
+            if (basicInfo == null) {
+                return new JsonResponse<Void>(Code.not_fund,"code=" + code);
+            }
+            toUse = Collections.singletonList(basicInfo);
         }else{
             toUse = basicInfoService.findAll();
         }
 
-    }
 
-
-    @RequestMapping("/ntes")
-    public String addNTESRequest(String code, String start, String end) {
-        FundBasicInfo basicInfo = basicInfoService.findByCode(code);
-        PageSizePageable pageable = NTESUtil.createPageable(basicInfo.getCode(),
-                basicInfo.getMmf(),start,end);
-        spider.addRequest(NTESUtil.createRequest(pageable));
-        return "success";
-    }
-
-    @RequestMapping("/ntes/all")
-    public String addAllNTESRequest(String start, String end) {
-        List<FundBasicInfo> infos = basicInfoService.findAll();
-        for (FundBasicInfo info : infos) {
-            PageSizePageable pageable = NTESUtil.createPageable(info.getCode(),
-                    info.getMmf(),start,end);
-            spider.addRequest(NTESUtil.createRequest(pageable));
+        switch (source) {
+            case "em" :
+                addEMRequest(toUse,start,end);
+                break;
+            case "sina":
+                addSINARequest(toUse,start,end);
+                break;
+            case "ntes" :
+                addNTESRequest(toUse,start,end);
+                break;
+            default:
+                return new JsonResponse(
+                        Code.not_fund,"unknown source [“+source+”]");
         }
-        return "success";
+
+        return new JsonResponse(Code.ok,"ok");
     }
 
-    @RequestMapping("/sina")
-    public String addSINARequest(String code, String start, String end) {
-        FundBasicInfo basicInfo = basicInfoService.findByCode(code);
-        PageSizePageable pageable = SINAUtil.createPageable(basicInfo.getCode(),
-                basicInfo.getMmf(),start,end);
-        spider.addRequest(SINAUtil.createRequest(pageable));
-        return "success";
+    private void addEMRequest(List<FundBasicInfo> basicInfoList,
+                              String start,String end) {
+        for (FundBasicInfo basicInfo : basicInfoList) {
+            GenericPageable pageable =
+                    EMUtil.createPageable(basicInfo.getCode(),
+                    basicInfo.getMmf(),start,end);
+
+            spider.addRequest(EMUtil.createRequest(pageable));
+        }
     }
 
-    @RequestMapping("/sina/all")
-    public String addAllSINARequest(String start, String end) {
-        List<FundBasicInfo> infos = basicInfoService.findAll();
-        for (FundBasicInfo info : infos) {
-            PageSizePageable pageable = SINAUtil.createPageable(info.getCode(),
+    private void addSINARequest(List<FundBasicInfo> basicInfoList,
+                                String start,String end) {
+        for (FundBasicInfo info : basicInfoList) {
+            PageSizePageable pageable =
+                    SINAUtil.createPageable(info.getCode(),
                     info.getMmf(),start,end);
             spider.addRequest(SINAUtil.createRequest(pageable));
         }
-        return "success";
     }
 
-    @RequestMapping("/em")
-    public String addEMRequest(String code, String start, String end) {
-        FundBasicInfo basicInfo = basicInfoService.findByCode(code);
-        GenericPageable pageable = EMUtil.createPageable(basicInfo.getCode(),
-                basicInfo.getMmf(),start,end);
-        spider.addRequest(EMUtil.createRequest(pageable));
-        return "success";
-    }
-
-    @RequestMapping("/em/all")
-    public String addAllEMRequest(String start, String end) {
-        List<FundBasicInfo> infos = basicInfoService.findAll();
-        for (FundBasicInfo info : infos) {
+    private void addNTESRequest(List<FundBasicInfo> basicInfoList,
+                                String start,String end) {
+        for (FundBasicInfo info : basicInfoList) {
             PageSizePageable pageable = NTESUtil.createPageable(info.getCode(),
                     info.getMmf(),start,end);
             spider.addRequest(NTESUtil.createRequest(pageable));
         }
-        return "success";
     }
+
 }
