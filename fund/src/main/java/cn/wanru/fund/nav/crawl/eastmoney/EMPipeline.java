@@ -1,4 +1,4 @@
-package cn.wanru.fund.nav.crawl.ntes;
+package cn.wanru.fund.nav.crawl.eastmoney;
 
 import cn.wanru.fund.nav.entity.BaseNav;
 import cn.wanru.fund.nav.service.NavService;
@@ -10,26 +10,21 @@ import java.util.List;
 
 /**
  * @author xxf
- * @date 17-9-9
+ * @since 2017/9/12
  */
 @Component
-public class NTESPipeline extends ClassBasePipeline<List<BaseNav>> {
+public class EMPipeline extends ClassBasePipeline<List<BaseNav>> {
 
     @Autowired
     private NavService navService;
 
-    public NTESPipeline() {
-        super(NTESUtil.class);
+    public EMPipeline() {
+        super(EMUtil.class);
     }
 
     @Override
-    public int getOrder() {
-        return 0;
-    }
-
-    @Override
-    public void processResult(List<BaseNav> navs) {
-        navs.forEach(navService::merge);
+    protected void processResult(List<BaseNav> result) {
+        result.forEach(navService::merge);
     }
 
 }

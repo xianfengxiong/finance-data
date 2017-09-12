@@ -6,7 +6,7 @@ import cn.wanru.webmagic.Pageable;
  * @author xxf
  * @date 17-9-10
  */
-public abstract class GenericPageable implements Pageable, Cloneable {
+public class GenericPageable implements Pageable, Cloneable {
 
     private String code;
 
@@ -82,6 +82,11 @@ public abstract class GenericPageable implements Pageable, Cloneable {
 
 // endregion
 
+
+    @Override
+    public boolean hasNext() {
+        return false;
+    }
 
     @Override
     public Pageable next() {

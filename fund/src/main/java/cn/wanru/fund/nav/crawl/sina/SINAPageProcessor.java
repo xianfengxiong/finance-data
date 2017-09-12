@@ -1,4 +1,4 @@
-package cn.wanru.fund.nav.crawl.ntes;
+package cn.wanru.fund.nav.crawl.sina;
 
 import cn.wanru.fund.crawler.GenericPageable;
 import cn.wanru.fund.nav.entity.BaseNav;
@@ -12,30 +12,27 @@ import java.util.List;
 
 /**
  * @author xxf
- * @date 17-9-9
+ * @since 2017/9/12
  */
 @Component
-public class NTESPageProcessor extends
-        ClassBasePageablePageProcessor<List<BaseNav>> {
+public class SINAPageProcessor extends ClassBasePageablePageProcessor<List<BaseNav>> {
 
-    public NTESPageProcessor() {
-        super(NTESUtil.class);
+    public SINAPageProcessor() {
+        super(SINAUtil.class);
     }
 
     @Override
     protected Request createRequest(Pageable pageable) {
-        GenericPageable genericPageable = (GenericPageable) pageable;
-        return NTESUtil.createRequest(genericPageable);
+        return SINAUtil.createRequest((GenericPageable) pageable);
     }
 
     @Override
     protected List<BaseNav> parsePage(Page page, Pageable pageable) {
-        return NTESUtil.parsePage(page,pageable);
+        return SINAUtil.parsePage(page,pageable);
     }
 
     @Override
-    protected void updatePageable(List<BaseNav> data, Pageable pageable) {
-        ((GenericPageable) pageable).setCurrentPageSize(data.size());
+    protected void updatePageable(List<BaseNav> result, Pageable pageable) {
+        ((GenericPageable) pageable).setCurrentPageSize(result.size());
     }
-
 }

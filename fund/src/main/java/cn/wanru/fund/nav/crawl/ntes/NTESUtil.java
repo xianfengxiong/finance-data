@@ -1,13 +1,13 @@
 package cn.wanru.fund.nav.crawl.ntes;
 
 import cn.wanru.fund.crawler.GenericPageable;
+import cn.wanru.fund.crawler.PageSizePageable;
 import cn.wanru.fund.crawler.ParsePageException;
 import cn.wanru.fund.nav.entity.BaseNav;
 import cn.wanru.fund.nav.entity.NavMMF;
 import cn.wanru.fund.nav.entity.NavNMF;
 import cn.wanru.fund.nav.entity.NavSource;
 import cn.wanru.fund.util.DateUtil;
-import cn.wanru.webmagic.PageUtil;
 import cn.wanru.webmagic.Pageable;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -19,7 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static cn.wanru.fund.crawler.Util.setSupportClass;
+import static cn.wanru.webmagic.PageUtil.setPageable;
+import static cn.wanru.webmagic.PageUtil.setSupportClass;
 
 /**
  * @author xxf
@@ -44,6 +45,19 @@ public class NTESUtil {
                     "start=(\\d{4}-\\d{2}-\\d{2})&end=(\\d{4}-\\d{2}-\\d{2}).*");
 
 
+    public static PageSizePageable createPageable(
+            String code, boolean mmf, String start, String end) {
+
+        PageSizePageable pageable = new PageSizePageable(60);
+        pageable.setCode(code);
+        pageable.setCurrentPage(0);
+        pageable.setCurrentPageSize(0);
+        pageable.setMmf(mmf);
+        pageable.setStart(start);
+        pageable.setEnd(end);
+        return pageable;
+    }
+
     public static Request createRequest(GenericPageable pageable) {
         String url = null;
         if (pageable.isMmf()) {
@@ -54,8 +68,8 @@ public class NTESUtil {
                     pageable.getCurrentPage(), pageable.getStart(), pageable.getEnd());
         }
         Request request = new Request(url);
-        PageUtil.setPageable(request, pageable);
-        setSupportClass(request, NTESPageProcessor.class);
+        setPageable(request, pageable);
+        setSupportClass(request, NTESUtil.class);
         return request;
     }
 

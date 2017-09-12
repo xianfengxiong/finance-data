@@ -24,7 +24,7 @@
         <java.version>1.8</java.version>
         <webmagic.version>0.7.3</webmagic.version>
         <jsoup.version>1.7.2</jsoup.version>
-        <webmagic-autoconfigure.version>1.0.3</webmagic-autoconfigure.version>
+        <webmagic-autoconfigure.version>1.0.5</webmagic-autoconfigure.version>
     </properties>
 
     <modules>
@@ -83,6 +83,12 @@
             <groupId>cn.wanru</groupId>
             <artifactId>webmagic-spring-boot-autoconfigure</artifactId>
             <version>${webmagic-autoconfigure.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j:slf4j</groupId>
+                    <artifactId>log4j12</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
