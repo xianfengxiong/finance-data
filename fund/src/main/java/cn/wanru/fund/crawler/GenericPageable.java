@@ -2,11 +2,14 @@ package cn.wanru.fund.crawler;
 
 import cn.wanru.webmagic.Pageable;
 
+import java.io.Serializable;
+
 /**
  * @author xxf
  * @date 17-9-10
  */
-public class GenericPageable implements Pageable, Cloneable {
+public class GenericPageable implements
+        Pageable, Cloneable ,Serializable {
 
     private String code;
 
