@@ -11,4 +11,5 @@ public interface FundBasicInfoDao extends JpaRepository<FundBasicInfo,Long> {
 
     FundBasicInfo findByCode(String code);
 
+    int countByCode(String code);
 }
