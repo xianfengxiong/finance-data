@@ -17,6 +17,10 @@
         </encoder>
     </appender>
 
+    <logger level="info" additivity="false" name="cn.wanru.fund">
+        <appender-ref ref="fund-info"/>
+    </logger>
+
     <appender name="nav-error" class="ch.qos.logback.core.FileAppender">
         <file>${logdir}/fund.error</file>
         <encoder>
@@ -42,6 +46,6 @@
     </logger>
 
     <root level="info">
-        <appender-ref ref="fund-info"/>
+        <appender-ref ref="StdOut"/>
     </root>
 </configuration>

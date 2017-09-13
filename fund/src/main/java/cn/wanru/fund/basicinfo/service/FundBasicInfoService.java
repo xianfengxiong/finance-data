@@ -25,4 +25,7 @@ public class FundBasicInfoService {
         return fundBasicInfoDao.findByCode(code);
     }
 
+    public boolean existByCode(String code) {
+        return fundBasicInfoDao.countByCode(code) > 0;
+    }
 }

@@ -56,8 +56,10 @@ CREATE TABLE IF NOT EXISTS cron_task(
   `bean_name` VARCHAR(100) COMMENT 'Bean的名称',
   `method_name` VARCHAR(100) COMMENT '调用的方法名称',
   `cron` VARCHAR(100) COMMENT 'cron表达式',
-  `comment` VARCHAR(200) COMMENT '注释',
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO cron_task(name,bean_name,method_name,cron) VALUES ('网易财经净值','navTask','crawlNavNTES','0 0 18 * * *');
+INSERT INTO cron_task(name,bean_name,method_name,cron)
+VALUES ('网易财经净值','navTask','crawlNavNTES','0 0 18 * * *'),
+  ('新浪财经基金净值','navTask','crawlNavSINA','0 0 19 * * *'),
+  ('东方财富网','navTask','crawlNavEM','0 0 20 * * *');
