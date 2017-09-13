@@ -33,8 +33,8 @@ public class NavTask {
     }
 
     private Pair<String, String> getDateRange() {
-        String start = DateUtil.toString(LocalDate.now());
-        String end = DateUtil.toString(LocalDate.now().minusDays(5));
+        String start = DateUtil.toString(LocalDate.now().minusDays(5));
+        String end = DateUtil.toString(LocalDate.now());
         return Pair.of(start, end);
     }
 }
