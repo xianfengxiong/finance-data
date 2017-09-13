@@ -25,9 +25,9 @@ public class NAVController {
     private FundBasicInfoService fundBasicInfoService;
 
 
-    @RequestMapping("/{code}/{source}/{start}-{end}")
+    @RequestMapping("/{code}/{source}/{start}/{end}")
     public JsonResponse addRequest(
-            @PathVariable(name = "code", required = false) String code,
+            @PathVariable(name = "code") String code,
             @PathVariable(name = "source") String source,
             @PathVariable(name = "start") String start,
             @PathVariable(name = "end") String end) {
@@ -36,6 +36,22 @@ public class NAVController {
             return new JsonResponse(Code.not_fund, "code [" + code + "] not found");
         }
 
+        addRequestBySource(code,source,start,end);
+        return new JsonResponse(Code.ok, "ok");
+    }
+
+    @RequestMapping("/{source}/{start}/{end}")
+    public JsonResponse addRequest(
+            @PathVariable(name = "source") String source,
+            @PathVariable(name = "start") String start,
+            @PathVariable(name = "end") String end) {
+
+        addRequestBySource(null,source,start,end);
+        return new JsonResponse(Code.ok, "ok");
+    }
+
+    private void addRequestBySource(String code,String source,
+                                    String start,String end) {
         switch (source) {
             case "em":
                 crawlRegistry.addEMRequest(code, start, end);
@@ -47,12 +63,8 @@ public class NAVController {
                 crawlRegistry.addNTESRequest(code, start, end);
                 break;
             default:
-                return new JsonResponse(
-                        Code.not_fund, "unknown source [“+source+”]");
+                throw new IllegalArgumentException(source);
         }
-
-        return new JsonResponse(Code.ok, "ok");
     }
-
 
 }

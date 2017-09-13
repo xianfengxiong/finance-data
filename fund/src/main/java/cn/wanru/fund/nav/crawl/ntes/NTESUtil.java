@@ -28,27 +28,25 @@ import static cn.wanru.webmagic.PageUtil.setSupportClass;
  */
 public class NTESUtil {
 
-    /*
-     * "http://quotes.money.163.com/fund/jzzs_150240_0.html?start=2016-04-01&end=2016-11-11&sort=TDATE&order=desc"
-     */
-    private static final String nmf_url_template =
-            "http://quotes.money.163.com/fund/jzzs_%s_%s.html?start=%s&end=%s&sort=TDATE&order=desc";
 
-    /*
-     * "http://quotes.money.163.com/fund/lssy_000009_0.html?start=2017-07-02&end=2017-09-08"
-     */
+    private static final String nmf_url_template =
+            "http://quotes.money.163.com/fund/jzzs_%s_%s.html?" +
+                    "start=%s&end=%s&sort=TDATE&order=desc";
+
     private static final String mmf_url_template =
-            "http://quotes.money.163.com/fund/lssy_%s_%s.html?start=%s&end=%s";
+            "http://quotes.money.163.com/fund/lssy_%s_%s.html?" +
+                    "start=%s&end=%s";
 
     private static final Pattern url_pattern = Pattern.compile(
             "http://quotes\\.money\\.163\\.com/fund/jzzs_(\\d+)_(\\d+)\\.html\\?" +
                     "start=(\\d{4}-\\d{2}-\\d{2})&end=(\\d{4}-\\d{2}-\\d{2}).*");
 
+    private static final int default_page_size = 60;
 
     public static PageSizePageable createPageable(
             String code, boolean mmf, String start, String end) {
 
-        PageSizePageable pageable = new PageSizePageable(60);
+        PageSizePageable pageable = new PageSizePageable(default_page_size);
         pageable.setCode(code);
         pageable.setCurrentPage(0);
         pageable.setCurrentPageSize(0);

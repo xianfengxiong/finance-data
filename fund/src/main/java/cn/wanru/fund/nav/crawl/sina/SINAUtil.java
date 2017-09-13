@@ -26,11 +26,12 @@ public class SINAUtil {
 
     private static final String nmf_url_template = "http://stock.finance.sina.com.cn/fundInfo/api/openapi.php/CaihuiFundInfoService.getNav?symbol=%s&datefrom=%s&dateto=%s&page=%s";
 
+    private static final int default_page_size = 21;
 
     public static PageSizePageable createPageable(
             String code, boolean mmf, String start, String end) {
 
-        PageSizePageable pageable = new PageSizePageable(20);
+        PageSizePageable pageable = new PageSizePageable(default_page_size);
         pageable.setCode(code);
         pageable.setCurrentPage(1);
         pageable.setMmf(mmf);

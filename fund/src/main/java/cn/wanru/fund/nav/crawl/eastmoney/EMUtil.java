@@ -52,8 +52,8 @@ public class EMUtil {
     }
 
     public static Request createRequest(GenericPageable pageable) {
-        String url = String.format(url_template,1,40000,
-                pageable.getCode(),pageable.getStart(),pageable.getEnd());
+        String url = String.format(url_template, pageable.getCode(),
+                1,40000,pageable.getStart(),pageable.getEnd());
         Request request = new Request(url);
         setPageable(request,pageable);
         setSupportClass(request,EMUtil.class);
@@ -96,7 +96,9 @@ public class EMUtil {
 
         List<BaseNav> result = new ArrayList<>(trs.size());
         for (Element tr : trs) {
-            result.add(type.parse(tr));
+            BaseNav baseNav = type.parse(tr);
+            baseNav.setCode(pageable.getCode());
+            result.add(baseNav);
         }
 
         return result;
