@@ -62,4 +62,5 @@ CREATE TABLE IF NOT EXISTS cron_task(
 INSERT INTO cron_task(name,bean_name,method_name,cron)
 VALUES ('网易财经净值','navTask','crawlNavNTES','0 0 18 * * *'),
   ('新浪财经基金净值','navTask','crawlNavSINA','0 0 19 * * *'),
-  ('东方财富网','navTask','crawlNavEM','0 0 20 * * *');
+  ('东方财富网','navTask','crawlNavEM','0 0 20 * * *'),
+  ('腾讯财经基金净值','navTask','crawlNavTENCENT','0 30 19 * * *');

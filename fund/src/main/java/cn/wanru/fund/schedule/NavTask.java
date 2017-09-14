@@ -32,6 +32,11 @@ public class NavTask {
         crawlRegistry.addNTESRequest(null, pair.getLeft(), pair.getRight());
     }
 
+    public void crawlNavTENCENT() {
+        crawlRegistry.addTencentRequest(null,true);
+        crawlRegistry.addTencentRequest(null,false);
+    }
+
     private Pair<String, String> getDateRange() {
         String start = DateUtil.toString(LocalDate.now().minusDays(5));
         String end = DateUtil.toString(LocalDate.now());

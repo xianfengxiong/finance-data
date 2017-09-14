@@ -5,5 +5,5 @@ package cn.wanru.fund.nav.entity;
  * @date 17-9-9
  */
 public enum NavSource {
-    east_money, sina, ntes
+    east_money, sina, ntes,tencent
 }

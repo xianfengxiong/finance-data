@@ -11,9 +11,14 @@ import org.joda.time.format.DateTimeFormatter;
  */
 public class DateUtil {
 
+    private static final String short_date_pattern = "yyyyMMdd";
+
     private static final String date_pattern = "yyyy-MM-dd";
 
     private static final String date_time_pattern = "yyyy-MM-dd HH:mm:ss";
+
+    private static final DateTimeFormatter short_date_formatter =
+            DateTimeFormat.forPattern(short_date_pattern);
 
     private static final DateTimeFormatter date_formatter =
             DateTimeFormat.forPattern(date_pattern);
@@ -36,5 +41,9 @@ public class DateUtil {
 
     public static DateTime parseDateTime(String value) {
         return DateTime.parse(value,date_time_formatter);
+    }
+
+    public static LocalDate parseShortDate(String date) {
+        return LocalDate.parse(date,short_date_formatter);
     }
 }

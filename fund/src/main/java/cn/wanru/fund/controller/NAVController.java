@@ -36,7 +36,12 @@ public class NAVController {
             return new JsonResponse(Code.not_fund, "code [" + code + "] not found");
         }
 
-        addRequestBySource(code,source,start,end);
+        if (source.equals("tencent")) {
+            crawlRegistry.addTencentRequest(code, true);
+            crawlRegistry.addTencentRequest(code, true);
+        }else {
+            addRequestBySource(code, source, start, end);
+        }
         return new JsonResponse(Code.ok, "ok");
     }
 
@@ -46,7 +51,13 @@ public class NAVController {
             @PathVariable(name = "start") String start,
             @PathVariable(name = "end") String end) {
 
-        addRequestBySource(null,source,start,end);
+        if (source.equals("tencent")) {
+            crawlRegistry.addTencentRequest(null,true);
+            crawlRegistry.addTencentRequest(null,true);
+        }else{
+            addRequestBySource(null,source,start,end);
+        }
+
         return new JsonResponse(Code.ok, "ok");
     }
 
