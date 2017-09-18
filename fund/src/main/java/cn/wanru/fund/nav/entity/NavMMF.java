@@ -12,8 +12,10 @@ import java.math.BigDecimal;
 @Table(name="nav_mmf")
 public class NavMMF extends BaseNav {
 
+    @Column(name="yield_7days")
     private BigDecimal yield7Days;
 
+    @Column(name="yield_10k")
     private BigDecimal yield10k;
 
     // region Getter/Setter
