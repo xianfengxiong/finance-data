@@ -19,23 +19,26 @@ public class JsonResponse<T> {
         return code;
     }
 
-    public void setCode(String code) {
+    public JsonResponse<T> setCode(String code) {
         this.code = code;
+        return this;
     }
 
     public String getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg) {
+    public JsonResponse<T> setMsg(String msg) {
         this.msg = msg;
+        return this;
     }
 
     public T getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public JsonResponse<T> setData(T data) {
         this.data = data;
+        return this;
     }
 }

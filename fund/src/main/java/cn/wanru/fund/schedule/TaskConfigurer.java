@@ -38,9 +38,9 @@ public class TaskConfigurer implements SchedulingConfigurer, ApplicationContextA
             Optional<ScheduledMethodRunnable> runnable = getRunnable(taskBean);
             if (runnable.isPresent()) {
                 taskRegistrar.addCronTask(new CronTask(runnable.get(), cron));
-                log.info("registry cron task[{}] success", taskBean.getName());
+                log.info("registry cron task[{}] success,cron=[{}]", taskBean.getName(),taskBean.getCron());
             } else {
-                log.warn("cron task[{}] registry failed",taskBean.getName());
+                log.warn("cron task[{}] registry failed,cron=[{}]",taskBean.getName(),taskBean.getCron());
             }
         }
     }

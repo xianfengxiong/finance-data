@@ -24,12 +24,12 @@ public class NavTask {
 
     public void crawlNavSINA() {
         Pair<String,String> pair = getDateRange();
-        crawlRegistry.addNTESRequest(null, pair.getLeft(), pair.getRight());
+        crawlRegistry.addSINARequest(null, pair.getLeft(), pair.getRight());
     }
 
     public void crawlNavEM() {
         Pair<String,String> pair = getDateRange();
-        crawlRegistry.addNTESRequest(null, pair.getLeft(), pair.getRight());
+        crawlRegistry.addEMRequest(null, pair.getLeft(), pair.getRight());
     }
 
     public void crawlNavTENCENT() {

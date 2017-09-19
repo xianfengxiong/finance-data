@@ -90,35 +90,46 @@ public class NTESUtil {
     }
 
     private static NavMMF parseMMFRow(Selectable row) {
-        List<String> fields = row.css("td", "text").all();
-        String date = fields.get(0);
-        String yield10k = fields.get(1).trim();
-        String yield7days = fields.get(2).trim();
+        try {
+            List<String> fields = row.css("td", "text").all();
+            String date = fields.get(0);
+            String yield10k = fields.get(1).trim();
+            String yield7days = fields.get(2).trim();
 
-        if (!yield7days.endsWith("%")) {
-            throw new ParsePageException("七日年化收益率字段不是以%结尾,fields=" +
-                    Arrays.toString(fields.toArray()));
+            if (!yield7days.endsWith("%")) {
+                throw new ParsePageException("七日年化收益率字段不是以%结尾,fields=" +
+                        Arrays.toString(fields.toArray()));
+            }
+
+            yield7days = yield7days.substring(0, yield7days.length() - 1);
+            if (yield7days.startsWith("--")) {
+                yield7days = null;
+            }
+
+            NavMMF bean = new NavMMF();
+            bean.setDate(DateUtil.parseDate(date));
+            bean.setYield7Days(yield7days == null ? null : new BigDecimal(yield7days));
+            bean.setYield10k(new BigDecimal(yield10k));
+            return bean;
+        }catch (Exception e) {
+            throw new ParsePageException(row.toString());
         }
-
-        yield7days = yield7days.substring(0,yield7days.length()-1);
-
-        NavMMF bean = new NavMMF();
-        bean.setDate(DateUtil.parseDate(date));
-        bean.setYield7Days(new BigDecimal(yield7days));
-        bean.setYield10k(new BigDecimal(yield10k));
-        return bean;
     }
 
     private static NavNMF parseNMFRow(Selectable row) {
-        List<String> fields = row.css("td", "text").all();
-        String date = fields.get(0);
-        String unitNavStr = fields.get(1);
-        String accumNavStr = fields.get(2);
-        NavNMF bean = new NavNMF();
-        bean.setDate(DateUtil.parseDate(date));
-        bean.setUnitNav(new BigDecimal(unitNavStr.trim()));
-        bean.setAccumNav(new BigDecimal(accumNavStr.trim()));
-        return bean;
+        try {
+            List<String> fields = row.css("td", "text").all();
+            String date = fields.get(0);
+            String unitNavStr = fields.get(1);
+            String accumNavStr = fields.get(2);
+            NavNMF bean = new NavNMF();
+            bean.setDate(DateUtil.parseDate(date));
+            bean.setUnitNav(new BigDecimal(unitNavStr.trim()));
+            bean.setAccumNav(new BigDecimal(accumNavStr.trim()));
+            return bean;
+        }catch (Exception e) {
+            throw new ParsePageException(row.toString());
+        }
     }
 
 }

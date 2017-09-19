@@ -70,11 +70,10 @@
             <!--<artifactId>jasper-compiler</artifactId>-->
             <!--<version>5.5.12</version>-->
         <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.tomcat.embed</groupId>-->
-            <!--<artifactId>tomcat-embed-jasper</artifactId>-->
-            <!--&lt;!&ndash;<version>8.0.8</version>&ndash;&gt;-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
