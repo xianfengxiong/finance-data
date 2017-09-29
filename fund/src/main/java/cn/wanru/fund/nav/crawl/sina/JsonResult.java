@@ -5,6 +5,7 @@ import cn.wanru.fund.nav.entity.NavMMF;
 import cn.wanru.fund.nav.entity.NavNMF;
 import cn.wanru.fund.util.DateUtil;
 import cn.wanru.fund.util.JsonUtil;
+import org.apache.commons.collections.ListUtils;
 import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * {"result":{"status":{"code":0},"data":{"data":null,"total_num":"0"}}}
  * @author xxf
  * @since 2017/9/12
  */
@@ -126,7 +128,7 @@ public class JsonResult {
 
     public List<BaseNav> toBaseNavList(boolean mmf) {
         List<Record> records = this.getResult().getData().getData();
-        if (records.size() == 0) {
+        if (records == null || records.size() == 0) {
             return Collections.emptyList();
         }
         List<BaseNav> result = new ArrayList<>(records.size());
