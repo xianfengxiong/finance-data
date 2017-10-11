@@ -5,7 +5,6 @@ import cn.wanru.fund.crawler.PageSizePageable;
 import cn.wanru.fund.crawler.ParsePageException;
 import cn.wanru.fund.nav.entity.BaseNav;
 import cn.wanru.fund.nav.entity.NavSource;
-import cn.wanru.fund.util.JsonUtil;
 import cn.wanru.webmagic.Pageable;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -59,7 +58,7 @@ public class SINAUtil {
     public static List<BaseNav> parsePage(Page page, Pageable pageable) {
         GenericPageable genericPageable = (GenericPageable) pageable;
         String json = page.getRawText();
-        JsonResult result = JsonUtil.fromJson(json, JsonResult.class);
+        JsonResult result = new JsonResult(json);
         if (!result.isSuccess()) {
             throw new ParsePageException(result.toString());
         }

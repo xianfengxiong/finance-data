@@ -89,7 +89,7 @@
             <version>${webmagic-autoconfigure.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.slf4j:slf4j</groupId>
+                    <groupId>org.slf4j</groupId>
                     <artifactId>log4j12</artifactId>
                 </exclusion>
             </exclusions>

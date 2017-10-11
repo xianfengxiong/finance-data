@@ -1,157 +1,155 @@
 package cn.wanru.fund.nav.crawl.sina;
 
+import cn.wanru.fund.crawler.ParsePageException;
 import cn.wanru.fund.nav.entity.BaseNav;
 import cn.wanru.fund.nav.entity.NavMMF;
 import cn.wanru.fund.nav.entity.NavNMF;
 import cn.wanru.fund.util.DateUtil;
 import cn.wanru.fund.util.JsonUtil;
-import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * {"result":{"status":{"code":0},"data":{"data":null,"total_num":"0"}}}
  * @author xxf
- * @since 2017/9/12
+ * @since 17/3/29
  */
-public class JsonResult {
+class JsonResult {
 
-    private Result result;
+  private String json;
 
-    // region Getter/Setter
-    public Result getResult() {
-        return result;
-    }
-    public void setResult(Result result) {
-        this.result = result;
-    }
-    // endregion
+  private Map result;
 
+  private Map status;
 
-    @Override
-    public String toString() {
-        return JsonUtil.toJson(this);
-    }
+  private int code;
 
-    static class Result {
-        Status status;
-        Data data;
-        // region Getter/Setter
-        public Status getStatus() {
-            return status;
-        }
-        public void setStatus(Status status) {
-            this.status = status;
-        }
-        public Data getData() {
-            return data;
-        }
-        public void setData(Data data) {
-            this.data = data;
-        }
-        // endregion
-    }
+  private Map data;
 
-    static class Status {
-        int code;
-        // region Getter/Setter
-        public int getCode() {
-            return code;
-        }
-        public void setCode(int code) {
-            this.code = code;
-        }
-        // endregion
+  private Object val;
+
+  private int totalNum;
+
+  JsonResult(String json) {
+    this.json = json;
+
+    //{"result":{"status":{"msg":"APPCYCLE (errno: 2)","code":11},"data":[]}}
+    Map map = JsonUtil.fromJson(json,Map.class);
+    result = (Map) map.get("result");
+    status = (Map) result.get("status");
+    code = (int) status.get("code");
+    data = (Map) result.get("data");
+    val = data.get("data");
+    totalNum = Integer.valueOf((String) data.get("total_num"));
+  }
+
+  boolean isSuccess() {
+    return code == 0;
+  }
+
+  int getStatusCode() {
+    return code;
+  }
+
+  int getTotalNum() {
+    return totalNum;
+  }
+
+  int getTotalPage() {
+    if (totalNum == 0 || val ==null){
+      return 0;
     }
 
-    static class Data {
-        List<Record> data;
-        int total_num;
+    return (int)Math.ceil(totalNum / 20.0);
+  }
 
-        public List<Record> getData() {
-            return data;
-        }
+  @SuppressWarnings("unchecked")
+  List<BaseNav> toBaseNavList(boolean mmf) {
+    if (val == null) {
+      return Collections.emptyList();
+    }
+    if (val instanceof Map) {
+      // 货币型基金
+      if (!mmf) {
+        throw new ParsePageException("json result " + toString()
+        + " is not a mmf fund format");
+      }
+      return parseMapData((Map)val);
+    }else{
+      // 非货币型或者货币型都有可能
+      return parseListData((List)val,mmf);
+    }
+  }
 
-        public void setData(List<Record> data) {
-            this.data = data;
-        }
-
-        public int getTotal_num() {
-            return total_num;
-        }
-
-        public void setTotal_num(int total_num) {
-            this.total_num = total_num;
-        }
+  private List<BaseNav> parseMapData(Map<String,Map<String,String>> map){
+    if (map.size() <= 0) {
+      return Collections.emptyList();
     }
 
-    static class Record extends HashMap {
+    List<BaseNav> beans = new ArrayList<>(map.size());
+    map.values().forEach(m->{
+      String date = m.get("fbrq");
+      String nh = m.get("nhsyl");
+      String dw = m.get("dwsy");
 
-        LocalDate getDate() {
-            String fbrq = (String) get("fbrq");
-            return DateUtil.parseDateTime(fbrq).toLocalDate();
-        }
+      NavMMF bean = new NavMMF();
+      bean.setDate(DateUtil.parseDateTime(date).toLocalDate());
+      BigDecimal nhD = StringUtils.isEmpty(nh) ? null : new BigDecimal(nh);
+      BigDecimal dwD = StringUtils.isEmpty(dw) ? null :  new BigDecimal(dw);
+      bean.setYield7Days(nhD);
+      bean.setYield10k(dwD);
+      beans.add(bean);
+    });
 
-        BigDecimal getUnitNav() {
-            String jjjz = (String) get("jjjz");
-            return jjjz == null ? null : new BigDecimal(jjjz);
-        }
+    return beans;
+  }
 
-        BigDecimal getAccumNav() {
-            String ljjz = (String) get("ljjz");
-            return ljjz == null ? null : new BigDecimal(ljjz);
-        }
-
-        BigDecimal getYield7Days() {
-            String nhsyl = (String) get("nhsyl");
-            return nhsyl == null ? null : new BigDecimal(nhsyl);
-        }
-
-        BigDecimal getYield10k() {
-            String dwsy = (String) get("dwsy");
-            return dwsy == null ? null : new BigDecimal(dwsy);
-        }
+  private List<BaseNav> parseListData(List<Map<String,String>> list,boolean mmf){
+    if (list.size() <= 0){
+      return Collections.emptyList();
     }
 
-    public boolean isSuccess() {
-        return getResult().getStatus().getCode() == 0;
+    List<BaseNav> result = new ArrayList<>(list.size());
+    list.forEach(map->result.add(populateBean(map,mmf)));
+
+    return result;
+  }
+
+  private BaseNav populateBean(Map<String,String> map,boolean mmf) {
+    String dateStr = map.get("fbrq");
+    LocalDate date = DateUtil.parseDateTime(dateStr).toLocalDate();
+
+    if (mmf) {
+      NavMMF bean = new NavMMF();
+      bean.setDate(date);
+      String nhsyl = map.get("nhsyl");
+      String dwsy = map.get("dwsy");
+      BigDecimal nhD = StringUtils.isEmpty(nhsyl) ? null : new BigDecimal(nhsyl);
+      BigDecimal dwD = StringUtils.isEmpty(dwsy) ? null : new BigDecimal(dwsy);
+      bean.setYield7Days(nhD);
+      bean.setYield10k(dwD);
+      return bean;
+    }else{
+      NavNMF bean = new NavNMF();
+      bean.setDate(date);
+      String jjjz = map.get("jjjz");
+      String ljjz = map.get("ljjz");
+      BigDecimal jjjzD = StringUtils.isEmpty(jjjz) ? null : new BigDecimal(jjjz);
+      BigDecimal ljjzD = StringUtils.isEmpty(ljjz) ? null : new BigDecimal(ljjz);
+      bean.setUnitNav(jjjzD);
+      bean.setAccumNav(ljjzD);
+      return bean;
     }
 
-    public int getTotalNum() {
-        return getResult().getData().getTotal_num();
-    }
+  }
 
-    public List<BaseNav> toBaseNavList(boolean mmf) {
-        List<Record> records = this.getResult().getData().getData();
-        if (records == null || records.size() == 0) {
-            return Collections.emptyList();
-        }
-        List<BaseNav> result = new ArrayList<>(records.size());
-        for (Record record : records) {
-            result.add(mapToBaseNav(record,mmf));
-        }
-        return result;
-    }
-
-    private BaseNav mapToBaseNav(Record record,boolean mmf) {
-        if (mmf) {
-            NavMMF bean = new NavMMF();
-            bean.setDate(record.getDate());
-            bean.setYield7Days(record.getYield7Days());
-            bean.setYield10k(record.getYield10k());
-            return bean;
-        }else{
-            NavNMF bean = new NavNMF();
-            bean.setDate(record.getDate());
-            bean.setUnitNav(record.getUnitNav());
-            bean.setAccumNav(record.getAccumNav());
-            return bean;
-        }
-    }
-
+  @Override
+  public String toString() {
+    return json;
+  }
 }
